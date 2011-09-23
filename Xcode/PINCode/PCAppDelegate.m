@@ -12,6 +12,8 @@
 
 @implementation PCAppDelegate
 
+@synthesize window = __window;
+
 #pragma mark -
 #pragma mark Application lifecycle
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions { 

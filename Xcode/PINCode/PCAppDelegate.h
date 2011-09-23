@@ -11,8 +11,11 @@
 #import "GCPINViewController.h"
 
 @interface PCAppDelegate : NSObject <UIApplicationDelegate, GCPINViewControllerDelegate> {
-    UIWindow *window;
+@private
+    UIWindow *__window;
 }
+
+@property (nonatomic, retain) IBOutlet UIWindow *window;
 
 @end
 
