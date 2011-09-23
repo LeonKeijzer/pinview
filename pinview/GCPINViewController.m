@@ -18,125 +18,93 @@
 
 @implementation GCPINViewController (private)
 - (void)setErrorLabelHidden:(BOOL)hidden animated:(BOOL)animated {
-	if (animated) {
-		[UIView beginAnimations:nil context:nil];
-	}
-	
-	errorLabel.alpha = (hidden) ? 0.0 : 1.0;
-	
-	if (animated) {
-		[UIView commitAnimations];
-	}
+//	if (animated) {
+//		[UIView beginAnimations:nil context:nil];
+//	}
+//	
+//	errorLabel.alpha = (hidden) ? 0.0 : 1.0;
+//	
+//	if (animated) {
+//		[UIView commitAnimations];
+//	}
 }
 - (void)updatePINDisplay {
-	for (NSInteger i = 0; i < [PINText length]; i++) {
-	  UILabel *label = [pinFields objectAtIndex:i];
-		if (self.secureTextEntry) {
-			[label setText:@"●"];
-		}
-		else {
-			NSRange subrange = NSMakeRange(i, 1);
-			NSString *substring = [PINText substringWithRange:subrange];
-			[label setText:substring];
-		}
-	}
-	for (NSInteger i = [PINText length]; i < 4; i++) {
-		UILabel *label = [pinFields objectAtIndex:i];
-		[label setText:@""];
-	}
+//	for (NSInteger i = 0; i < [PINText length]; i++) {
+//	  UILabel *label = [pinFields objectAtIndex:i];
+//		if (self.secureTextEntry) {
+//			[label setText:@"●"];
+//		}
+//		else {
+//			NSRange subrange = NSMakeRange(i, 1);
+//			NSString *substring = [PINText substringWithRange:subrange];
+//			[label setText:substring];
+//		}
+//	}
+//	for (NSInteger i = [PINText length]; i < 4; i++) {
+//		UILabel *label = [pinFields objectAtIndex:i];
+//		[label setText:@""];
+//	}
 }
 @end
 
 @implementation GCPINViewController
 
-@synthesize messageText, errorText;
-@synthesize secureTextEntry;
-@synthesize delegate, userInfo;
+@synthesize textField = __textField;
+@synthesize messageLabel = __messageLabel;
+@synthesize errorLabel = __errorLabel;
+@synthesize viewDidLoadBlock = __viewDidLoad;
 
-#pragma mark -
-#pragma mark initialize
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
-	if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
-		self.messageText = @"";
-		self.errorText = @"";
-		PINText = [@"" retain];
-		self.title = @"";
-		self.delegate = nil;
-		self.secureTextEntry = YES;
+#pragma mark - object methods
+- (id)initWithNibName:(NSString *)name bundle:(NSBundle *)bundle {
+	if (self = [super initWithNibName:name bundle:bundle]) {
+        self.title = @"";
+        [[NSNotificationCenter defaultCenter]
+         addObserver:self
+         selector:@selector(textFieldTextDidChange:)
+         name:UITextFieldTextDidChangeNotification
+         object:nil];
 	}
 	return self;
 }
-
-#pragma mark -
-#pragma mark memory management
-- (void)viewDidUnload {
-	[[NSNotificationCenter defaultCenter] removeObserver:self
-													name:UITextFieldTextDidChangeNotification
-												  object:inputField];
-	
-	[super viewDidUnload];
-	
-	[pinFields release];
-	pinFields = nil;
-	
-	fieldOneLabel = nil;
-	fieldTwoLabel = nil;
-	fieldThreeLabel = nil;
-	fieldFourLabel = nil;
-	messageLabel = nil;
-	errorLabel = nil;
-	inputField = nil;
-}
 - (void)dealloc {
-	[[NSNotificationCenter defaultCenter] removeObserver:self
-													name:UITextFieldTextDidChangeNotification
-												  object:inputField];
-	
-	[pinFields release];
-	pinFields = nil;
-	
-	[PINText release];
-	PINText = nil;
-	
-	self.errorText = nil;
-	self.messageText = nil;
-	
+    [[NSNotificationCenter defaultCenter]
+     removeObserver:self
+     name:UITextFieldTextDidChangeNotification
+     object:nil];
+    self.textField = nil;
+    self.errorLabel = nil;
+    self.messageLabel = nil;
+    self.viewDidLoadBlock = nil;
     [super dealloc];
 }
 
-#pragma mark -
-#pragma mark view lifecycle
+#pragma mark - view lifecycle
 - (void)viewDidLoad {
 	[super viewDidLoad];
+    
+    // default view state
+    UIImage *image = [UIImage imageNamed:@"PINBox"];
+    image = [image stretchableImageWithLeftCapWidth:25 topCapHeight:0];
+    self.textField.background = image;
+    self.textField.keyboardType = UIKeyboardTypeNumberPad;
+    self.textField.secureTextEntry = YES;
+    self.errorLabel.hidden = YES;
+    
+    // perform user actions
+    if (self.viewDidLoadBlock) {
+        self.viewDidLoadBlock();
+    }
 	
-	// text notifs
-	[[NSNotificationCenter defaultCenter] addObserver:self
-											 selector:@selector(textDidChange:)
-												 name:UITextFieldTextDidChangeNotification
-											   object:inputField];
-	 
-	// setup input field
-	[inputField setDelegate:self];
-	[inputField setKeyboardType:UIKeyboardTypeNumberPad];
-	[inputField setHidden:YES];
-	[inputField becomeFirstResponder];
-	
-	// setup pinfields list
-	pinFields = [[NSArray alloc] initWithObjects:
-				 fieldOneLabel, fieldTwoLabel,
-				 fieldThreeLabel, fieldFourLabel, nil];
-	
-	// set initial pin text
-	[self updatePINDisplay];
-	
-	// set default label states
-	[messageLabel setText:messageText];
-	[errorLabel setText:errorText];
-	[self setErrorLabelHidden:YES animated:NO];
+    // configure text field
+    self.textField.delegate = self;
+    [self.textField becomeFirstResponder];
+    
 }
-- (void)viewWillAppear:(BOOL)animated {
-	[super viewWillAppear:animated];
-	[self.navigationController setNavigationBarHidden:NO animated:animated];
+- (void)viewDidUnload {
+    [super viewDidUnload];
+    self.textField = nil;
+    self.errorLabel = nil;
+    self.messageLabel = nil;
 }
 
 #pragma mark -
@@ -147,56 +115,44 @@
 	[navController release];
 }
 
-#pragma mark -
-#pragma mark text methods
-- (void)textDidChange:(NSNotification *)notif {
-	UITextField *field = [notif object];
-	if (field == inputField) {
-		NSString *newText = field.text;
-		
-		if ([newText length] == 4) {
-			NSString *toValidate = [field.text copy];
-			BOOL valid = [delegate pinView:self validateCode:toValidate];
-			[toValidate release];
-			if (!valid) {
-				AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
-				[self setErrorLabelHidden:NO animated:YES];
-				inputField.text = @"";
-			}
-		}
-		else {
-			[PINText release];
-			PINText = [newText copy];
-		}
-		
-		[self updatePINDisplay];
-	}
+#pragma mark - text field methods
+- (void)textFieldTextDidChange:(NSNotification *)notif {
+    if (self.textField == [notif object]) {
+        
+    }
+    
+    
+//	UITextField *field = [notif object];
+//	if (field == inputField) {
+//		NSString *newText = field.text;
+//		
+//		if ([newText length] == 4) {
+//			NSString *toValidate = [field.text copy];
+//			BOOL valid = [delegate pinView:self validateCode:toValidate];
+//			[toValidate release];
+//			if (!valid) {
+//				AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
+//				[self setErrorLabelHidden:NO animated:YES];
+//				inputField.text = @"";
+//			}
+//		}
+//		else {
+//			[PINText release];
+//			PINText = [newText copy];
+//		}
+//		
+//		[self updatePINDisplay];
+//	}
 }
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
-	if ([PINText length] == 4 && [string length] > 0) {
-		return NO;
-	}
-	else {
-		[self setErrorLabelHidden:YES animated:YES];
-		return YES;
-	}
-}
-
-#pragma mark -
-#pragma mark cutsom accessors
-- (void)setMessageText:(NSString *)text {
-	[messageText release];
-	messageText = [text copy];
-	if (messageLabel != nil) {
-		messageLabel.text = messageText;
-	}
-}
-- (void)setErrorText:(NSString *)text {
-	[errorText release];
-	errorText = [text copy];
-	if (errorLabel != nil) {
-		errorLabel.text = errorText;
-	}
+//	if ([PINText length] == 4 && [string length] > 0) {
+//		return NO;
+//	}
+//	else {
+//		[self setErrorLabelHidden:YES animated:YES];
+//		return YES;
+//	}
+    return YES;
 }
 
 @end

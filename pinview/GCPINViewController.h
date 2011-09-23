@@ -8,41 +8,26 @@
 
 #import <UIKit/UIKit.h>
 
-@class GCPINViewController;
-@protocol GCPINViewControllerDelegate <NSObject>
-@required
-- (BOOL)pinView:(GCPINViewController *)pinView validateCode:(NSString *)code;
-@end
+typedef void (^GCPINViewControllerViewDidLoadBlock) ();
 
 @interface GCPINViewController : UIViewController <UITextFieldDelegate> {
 @private
-	IBOutlet UILabel *fieldOneLabel;
-	IBOutlet UILabel *fieldTwoLabel;
-	IBOutlet UILabel *fieldThreeLabel;
-	IBOutlet UILabel *fieldFourLabel;
-	
-	IBOutlet UILabel *messageLabel;
-	IBOutlet UILabel *errorLabel;
-	IBOutlet UITextField *inputField;
-	
-	NSArray *pinFields;
-	NSString *messageText;
-	NSString *errorText;
-	NSString *PINText;
-	
-	BOOL secureTextEntry;
-	
-	id<GCPINViewControllerDelegate> delegate;
-	
-	id userInfo;
+    UITextField     *__textField;
+    UILabel         *__messageLabel;
+	UILabel         *__errorLabel;
 }
 
-@property (nonatomic, copy) NSString *messageText;
-@property (nonatomic, copy) NSString *errorText;
-@property (nonatomic, assign) BOOL secureTextEntry;
-@property (nonatomic, assign) id<GCPINViewControllerDelegate> delegate;
-@property (nonatomic, retain) id userInfo;
+/*
+ User interface properties.
+ */
+@property (nonatomic, retain) IBOutlet UITextField *textField;
+@property (nonatomic, retain) IBOutlet UILabel *messageLabel;
+@property (nonatomic, retain) IBOutlet UILabel *errorLabel;
+@property (nonatomic, copy) GCPINViewControllerViewDidLoadBlock viewDidLoadBlock;
 
+/*
+ Present a PIN code view controller wrapped in a navigation controller.
+ */
 - (void)presentViewFromViewController:(UIViewController *)controller animated:(BOOL)animated;
 
 @end

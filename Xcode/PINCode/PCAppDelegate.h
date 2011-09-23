@@ -8,9 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-#import "GCPINViewController.h"
-
-@interface PCAppDelegate : NSObject <UIApplicationDelegate, GCPINViewControllerDelegate> {
+@interface PCAppDelegate : NSObject <UIApplicationDelegate> {
 @private
     UIWindow *__window;
 }

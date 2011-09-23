@@ -17,31 +17,27 @@
 #pragma mark -
 #pragma mark Application lifecycle
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions { 
-	// setup main view controller   
-	UIViewController *defaultView = [[UIViewController alloc] init];
-	UILabel *label = [[[UILabel alloc] initWithFrame:CGRectMake(10, 200, 300, 50)] autorelease];
-	label.backgroundColor = [UIColor blackColor];
-	label.textColor = [UIColor orangeColor];
-	label.text = @"Success!";
-	[defaultView.view addSubview:label];
-	
-	// setup pin view
-	GCPINViewController *pinView = [[GCPINViewController alloc] initWithNibName:@"PINViewDefault" bundle:nil];
-	pinView.delegate = self;
-	pinView.messageText = @"Enter Your PIN";
-	pinView.title = @"PIN Code";
-	pinView.errorText = @"Invalid";
-	
-	// setup window
-	window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-	[window setRootViewController:defaultView];
-	[window makeKeyAndVisible];
-	
-	// show pin view
-	[pinView presentViewFromViewController:defaultView animated:NO];
-	
-	// return
-	return YES;
+
+    // root view controller
+    UIViewController *controller = [[UIViewController alloc] initWithNibName:nil bundle:nil];
+    self.window.rootViewController = controller;
+    [controller release];
+    
+    // show window
+    [self.window makeKeyAndVisible];
+    
+    // show pin screen
+    GCPINViewController *PINController = [[GCPINViewController alloc] initWithNibName:@"PINViewDefault" bundle:nil];
+    PINController.viewDidLoadBlock = ^{
+        PINController.messageLabel.text = @"Message";
+        PINController.errorLabel.text = @"Error";
+    };
+    [PINController presentViewFromViewController:self.window.rootViewController animated:YES];
+    [PINController release];
+    
+    // return
+    return YES;
+    
 }
 
 #pragma mark -
@@ -54,12 +50,9 @@
 	return correct;
 }
 
-#pragma mark -
-#pragma mark Memory management
+#pragma mark - memory management
 - (void)dealloc {
-    [window release];
-	window = nil;
-	
+    self.window = nil;
     [super dealloc];
 }
 
