@@ -10,14 +10,10 @@
 
 @class GCPasscodePatternControl;
 
-/*
- Block called on `viewDidLoad`.
- */
+// Block called on `viewDidLoad`.
 typedef void (^GCPINViewControllerViewDidLoadBlock) ();
 
-/*
- Define the type of passcode controller to use.
- */
+// Define the type of passcode controller to use.
 typedef enum {
     
     // text passcode, either as a PIN or full text passcode
@@ -28,9 +24,7 @@ typedef enum {
     
 } GCPasscodeViewControllerType;
 
-/*
- Define the mode for the controller to use.
- */
+// Define the mode for the controller to use.
 typedef enum {
     
     // create a new passcode
@@ -46,25 +40,27 @@ typedef enum {
  */
 @interface GCPasscodeViewController : UIViewController <UITextFieldDelegate>
 
-/*
- User interface properties.
- */
-@property (nonatomic, retain) IBOutlet UITextField *textField;
+// used in both text and pattern modes
 @property (nonatomic, retain) IBOutlet UILabel *messageLabel;
 @property (nonatomic, retain) IBOutlet UILabel *errorLabel;
+
+// used in text mode
+@property (nonatomic, retain) IBOutlet UITextField *textField;
+
+// used in pattern mode
+@property (nonatomic, retain) IBOutlet GCPasscodePatternControl *patternControl;
+
+// executed every time the view is loaded
 @property (nonatomic, copy) GCPINViewControllerViewDidLoadBlock viewDidLoadBlock;
 
-/*
- 
- */
+// Create a passcode view controller given the nib, type, and mode information.
 - (id)initWithNibName:(NSString *)nib
                bundle:(NSBundle *)bundle
                  type:(GCPasscodeViewControllerType)type
                  mode:(GCPasscodeViewControllerMode)mode;
 
-/*
- Present a PIN code view controller wrapped in a navigation controller.
- */
-- (void)presentViewFromViewController:(UIViewController *)controller animated:(BOOL)animated;
+// Present a PIN code view controller wrapped in a navigation controller.
+- (void)presentFromViewController:(UIViewController *)controller
+                         animated:(BOOL)animated;
 
 @end
