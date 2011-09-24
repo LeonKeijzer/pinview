@@ -8,10 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface PCAppDelegate : NSObject <UIApplicationDelegate> {
-@private
-    UIWindow *__window;
-}
+@interface PCAppDelegate : NSObject <UIApplicationDelegate>
 
 @property (nonatomic, retain) IBOutlet UIWindow *window;
 
