@@ -8,8 +8,6 @@
 
 #import "PCAppDelegate.h"
 
-#import "GCPasscodeViewController.h"
-
 @implementation PCAppDelegate
 
 @synthesize window = __window;

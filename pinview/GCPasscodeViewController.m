@@ -9,68 +9,35 @@
 #import <AudioToolbox/AudioToolbox.h>
 
 #import "GCPasscodeViewController.h"
-#import <AudioToolbox/AudioToolbox.h>
-
-@interface GCPasscodeViewController (private)
-- (void)setErrorLabelHidden:(BOOL)hidden animated:(BOOL)animated;
-- (void)updatePINDisplay;
-@end
-
-@implementation GCPasscodeViewController (private)
-- (void)setErrorLabelHidden:(BOOL)hidden animated:(BOOL)animated {
-//	if (animated) {
-//		[UIView beginAnimations:nil context:nil];
-//	}
-//	
-//	errorLabel.alpha = (hidden) ? 0.0 : 1.0;
-//	
-//	if (animated) {
-//		[UIView commitAnimations];
-//	}
-}
-- (void)updatePINDisplay {
-//	for (NSInteger i = 0; i < [PINText length]; i++) {
-//	  UILabel *label = [pinFields objectAtIndex:i];
-//		if (self.secureTextEntry) {
-//			[label setText:@"●"];
-//		}
-//		else {
-//			NSRange subrange = NSMakeRange(i, 1);
-//			NSString *substring = [PINText substringWithRange:subrange];
-//			[label setText:substring];
-//		}
-//	}
-//	for (NSInteger i = [PINText length]; i < 4; i++) {
-//		UILabel *label = [pinFields objectAtIndex:i];
-//		[label setText:@""];
-//	}
-}
-@end
+#import "GCPasscodePatternControl.h"
 
 @interface GCPasscodeViewController ()
-@property (nonatomic, assign) GCPasscodeViewControllerType type;
 @property (nonatomic, assign) GCPasscodeViewControllerMode mode;
 @end
 
 @implementation GCPasscodeViewController
 
-@synthesize type = __type;
 @synthesize mode = __mode;
-
-@synthesize textField = __textField;
 @synthesize messageLabel = __messageLabel;
 @synthesize errorLabel = __errorLabel;
+@synthesize textField = __textField;
+@synthesize patternControl = __patternControl;
 @synthesize viewDidLoadBlock = __viewDidLoad;
+@synthesize backgroundView = __backgroundView;
 
 #pragma mark - object methods
 - (id)initWithNibName:(NSString *)nib
                bundle:(NSBundle *)bundle
-                 type:(GCPasscodeViewControllerType)type
                  mode:(GCPasscodeViewControllerMode)mode {
     self = [super initWithNibName:nib bundle:bundle];
     if (self) {
-        self.type = type;
         self.mode = mode;
+        if (self.mode == GCPasscodeViewControllerModeCreate) {
+            self.title = @"Create Passcode";
+        }
+        else {
+            self.title = @"Login";
+        }
         [[NSNotificationCenter defaultCenter]
          addObserver:self
          selector:@selector(textFieldTextDidChange:)
@@ -90,33 +57,32 @@
     self.viewDidLoadBlock = nil;
     [super dealloc];
 }
+- (void)presentFromViewController:(UIViewController *)controller animated:(BOOL)animated {
+	UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:self];
+	[controller presentModalViewController:navController animated:animated];
+	[navController release];
+}
 
 #pragma mark - view lifecycle
 - (void)viewDidLoad {
 	[super viewDidLoad];
     
-    // text mode
-    if (self.mode == GCPasscodeViewControllerTypeText) {
-        UIImage *image = [UIImage imageNamed:@"PINBox"];
-        image = [image stretchableImageWithLeftCapWidth:25 topCapHeight:0];
-        self.textField.background = image;
-        self.textField.keyboardType = UIKeyboardTypeNumberPad;
-        self.textField.secureTextEntry = YES;
-    }
-    
-    // pattern mode
-    else {
-        
-    }
-    
     // default view state
-    
+    UIImage *image = [UIImage imageNamed:@"PINBox"];
+    image = [image stretchableImageWithLeftCapWidth:25 topCapHeight:0];
+    self.textField.background = image;
+    self.textField.keyboardType = UIKeyboardTypeNumberPad;
+    self.textField.secureTextEntry = YES;
+    [self.patternControl addTarget:self action:@selector(patternControlValueChanged:) forControlEvents:UIControlEventValueChanged];
     self.errorLabel.hidden = YES;
     
     // perform user actions
-//    if (self.viewDidLoadBlock) {
-//        self.viewDidLoadBlock();
-//    }
+    if (self.viewDidLoadBlock) {
+        self.viewDidLoadBlock();
+    }
+    
+    [self.view addSubview:self.backgroundView];
+    [self.view sendSubviewToBack:self.backgroundView];
 	
     // configure text field
     self.textField.delegate = self;
@@ -130,12 +96,9 @@
     self.messageLabel = nil;
 }
 
-#pragma mark -
-#pragma mark show view controller
-- (void)presentViewFromViewController:(UIViewController *)controller animated:(BOOL)animated {
-	UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:self];
-	[controller presentModalViewController:navController animated:animated];
-	[navController release];
+#pragma mark - pattern control
+- (void)patternControlValueChanged:(GCPasscodePatternControl *)control {
+    NSLog(@"%@", [control patternString]);
 }
 
 #pragma mark - text field methods

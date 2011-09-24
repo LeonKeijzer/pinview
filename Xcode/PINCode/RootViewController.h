@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+#import "GCPasscodeViewController.h"
+
 @interface RootViewController : UIViewController <UIActionSheetDelegate>
 
 - (IBAction)setPasscode;

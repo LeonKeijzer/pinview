@@ -13,17 +13,6 @@
 // Block called on `viewDidLoad`.
 typedef void (^GCPINViewControllerViewDidLoadBlock) ();
 
-// Define the type of passcode controller to use.
-typedef enum {
-    
-    // text passcode, either as a PIN or full text passcode
-    GCPasscodeViewControllerTypeText = 0,
-    
-    // pattern passcode
-    GCPasscodeViewControllerTypePattern
-    
-} GCPasscodeViewControllerType;
-
 // Define the mode for the controller to use.
 typedef enum {
     
@@ -43,6 +32,7 @@ typedef enum {
 // used in both text and pattern modes
 @property (nonatomic, retain) IBOutlet UILabel *messageLabel;
 @property (nonatomic, retain) IBOutlet UILabel *errorLabel;
+@property (nonatomic, retain) IBOutlet UIView *backgroundView;
 
 // used in text mode
 @property (nonatomic, retain) IBOutlet UITextField *textField;
@@ -56,7 +46,6 @@ typedef enum {
 // Create a passcode view controller given the nib, type, and mode information.
 - (id)initWithNibName:(NSString *)nib
                bundle:(NSBundle *)bundle
-                 type:(GCPasscodeViewControllerType)type
                  mode:(GCPasscodeViewControllerMode)mode;
 
 // Present a PIN code view controller wrapped in a navigation controller.

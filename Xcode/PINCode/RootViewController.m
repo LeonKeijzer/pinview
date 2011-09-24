@@ -33,6 +33,13 @@
     NSString *title = [actionSheet buttonTitleAtIndex:buttonIndex];
     if ([title isEqualToString:@"Pattern"]) {
         
+        GCPasscodeViewController *controller = [[GCPasscodeViewController alloc]
+                                                initWithNibName:@"PasscodePatternViewDefault"
+                                                bundle:nil
+                                                mode:GCPasscodeViewControllerModeCreate];
+        [controller presentFromViewController:self animated:YES];
+        [controller release];
+        
     }
     else if ([title isEqualToString:@"Text"]) {
         
