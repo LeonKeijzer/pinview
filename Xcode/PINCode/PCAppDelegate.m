@@ -8,7 +8,7 @@
 
 #import "PCAppDelegate.h"
 
-#import "GCPINViewController.h"
+#import "GCPasscodeViewController.h"
 
 @implementation PCAppDelegate
 
@@ -27,7 +27,7 @@
     [self.window makeKeyAndVisible];
     
     // show pin screen
-    GCPINViewController *PINController = [[GCPINViewController alloc] initWithNibName:@"PINViewDefault" bundle:nil];
+    GCPasscodeViewController *PINController = [[GCPasscodeViewController alloc] initWithNibName:@"PINViewDefault" bundle:nil];
     PINController.viewDidLoadBlock = ^{
         PINController.messageLabel.text = @"Message";
         PINController.errorLabel.text = @"Error";
@@ -42,7 +42,7 @@
 
 #pragma mark -
 #pragma mark GCPINViewControllerDelegate
-- (BOOL)pinView:(GCPINViewController *)pinView validateCode:(NSString *)code {
+- (BOOL)pinView:(GCPasscodeViewController *)pinView validateCode:(NSString *)code {
 	BOOL correct = [code isEqualToString:@"1234"];
 	if (correct) {
 		[pinView dismissModalViewControllerAnimated:YES];

@@ -8,15 +8,15 @@
 
 #import <AudioToolbox/AudioToolbox.h>
 
-#import "GCPINViewController.h"
+#import "GCPasscodeViewController.h"
 #import <AudioToolbox/AudioToolbox.h>
 
-@interface GCPINViewController (private)
+@interface GCPasscodeViewController (private)
 - (void)setErrorLabelHidden:(BOOL)hidden animated:(BOOL)animated;
 - (void)updatePINDisplay;
 @end
 
-@implementation GCPINViewController (private)
+@implementation GCPasscodeViewController (private)
 - (void)setErrorLabelHidden:(BOOL)hidden animated:(BOOL)animated {
 //	if (animated) {
 //		[UIView beginAnimations:nil context:nil];
@@ -47,7 +47,15 @@
 }
 @end
 
-@implementation GCPINViewController
+@interface GCPasscodeViewController ()
+@property (nonatomic, assign) GCPasscodeViewControllerType type;
+@property (nonatomic, assign) GCPasscodeViewControllerMode mode;
+@end
+
+@implementation GCPasscodeViewController
+
+@synthesize type = __type;
+@synthesize mode = __mode;
 
 @synthesize textField = __textField;
 @synthesize messageLabel = __messageLabel;
@@ -55,16 +63,21 @@
 @synthesize viewDidLoadBlock = __viewDidLoad;
 
 #pragma mark - object methods
-- (id)initWithNibName:(NSString *)name bundle:(NSBundle *)bundle {
-	if (self = [super initWithNibName:name bundle:bundle]) {
-        self.title = @"";
+- (id)initWithNibName:(NSString *)nib
+               bundle:(NSBundle *)bundle
+                 type:(GCPasscodeViewControllerType)type
+                 mode:(GCPasscodeViewControllerMode)mode {
+    self = [super initWithNibName:nib bundle:bundle];
+    if (self) {
+        self.type = type;
+        self.mode = mode;
         [[NSNotificationCenter defaultCenter]
          addObserver:self
          selector:@selector(textFieldTextDidChange:)
          name:UITextFieldTextDidChangeNotification
          object:nil];
-	}
-	return self;
+    }
+    return self;
 }
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter]
@@ -82,18 +95,28 @@
 - (void)viewDidLoad {
 	[super viewDidLoad];
     
+    // text mode
+    if (self.mode == GCPasscodeViewControllerTypeText) {
+        UIImage *image = [UIImage imageNamed:@"PINBox"];
+        image = [image stretchableImageWithLeftCapWidth:25 topCapHeight:0];
+        self.textField.background = image;
+        self.textField.keyboardType = UIKeyboardTypeNumberPad;
+        self.textField.secureTextEntry = YES;
+    }
+    
+    // pattern mode
+    else {
+        
+    }
+    
     // default view state
-    UIImage *image = [UIImage imageNamed:@"PINBox"];
-    image = [image stretchableImageWithLeftCapWidth:25 topCapHeight:0];
-    self.textField.background = image;
-    self.textField.keyboardType = UIKeyboardTypeNumberPad;
-    self.textField.secureTextEntry = YES;
+    
     self.errorLabel.hidden = YES;
     
     // perform user actions
-    if (self.viewDidLoadBlock) {
-        self.viewDidLoadBlock();
-    }
+//    if (self.viewDidLoadBlock) {
+//        self.viewDidLoadBlock();
+//    }
 	
     // configure text field
     self.textField.delegate = self;
@@ -117,7 +140,7 @@
 
 #pragma mark - text field methods
 - (void)textFieldTextDidChange:(NSNotification *)notif {
-    if (self.textField == [notif object]) {
+    if (self.textField && self.textField == [notif object]) {
         
     }
     

@@ -12,11 +12,12 @@
 		288765FD0DF74451002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765FC0DF74451002DB57D /* CoreGraphics.framework */; };
 		3B000B6D142D0C6500A52F28 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 3B000B68142D0C6500A52F28 /* main.m */; };
 		3B000B6E142D0C6500A52F28 /* PCAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 3B000B6A142D0C6500A52F28 /* PCAppDelegate.m */; };
-		3B000B76142D0C8000A52F28 /* GCPINViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3B000B72142D0C8000A52F28 /* GCPINViewController.m */; };
+		3B000B76142D0C8000A52F28 /* GCPasscodeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3B000B72142D0C8000A52F28 /* GCPasscodeViewController.m */; };
 		3B000B77142D0C8000A52F28 /* PINBox.png in Resources */ = {isa = PBXBuildFile; fileRef = 3B000B73142D0C8000A52F28 /* PINBox.png */; };
 		3B000B78142D0C8000A52F28 /* PINBox@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3B000B74142D0C8000A52F28 /* PINBox@2x.png */; };
 		3B000B79142D0C8000A52F28 /* PINViewDefault.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3B000B75142D0C8000A52F28 /* PINViewDefault.xib */; };
 		3B000B7B142D0C9F00A52F28 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3B000B7A142D0C9F00A52F28 /* MainWindow.xib */; };
+		3B3139D0142E695200401392 /* GCPasscodePatternControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 3B3139CF142E695200401392 /* GCPasscodePatternControl.m */; };
 		3B7D74C1125FC41B00376B2C /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B7D74C0125FC41B00376B2C /* AudioToolbox.framework */; };
 /* End PBXBuildFile section */
 
@@ -30,12 +31,14 @@
 		3B000B6A142D0C6500A52F28 /* PCAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCAppDelegate.m; sourceTree = "<group>"; };
 		3B000B6B142D0C6500A52F28 /* PINCode-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "PINCode-Info.plist"; sourceTree = "<group>"; };
 		3B000B6C142D0C6500A52F28 /* PINCode_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PINCode_Prefix.pch; sourceTree = "<group>"; };
-		3B000B71142D0C8000A52F28 /* GCPINViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCPINViewController.h; sourceTree = "<group>"; };
-		3B000B72142D0C8000A52F28 /* GCPINViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCPINViewController.m; sourceTree = "<group>"; };
+		3B000B71142D0C8000A52F28 /* GCPasscodeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; path = GCPasscodeViewController.h; sourceTree = "<group>"; };
+		3B000B72142D0C8000A52F28 /* GCPasscodeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCPasscodeViewController.m; sourceTree = "<group>"; };
 		3B000B73142D0C8000A52F28 /* PINBox.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = PINBox.png; sourceTree = "<group>"; };
 		3B000B74142D0C8000A52F28 /* PINBox@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "PINBox@2x.png"; sourceTree = "<group>"; };
 		3B000B75142D0C8000A52F28 /* PINViewDefault.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PINViewDefault.xib; sourceTree = "<group>"; };
 		3B000B7A142D0C9F00A52F28 /* MainWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MainWindow.xib; sourceTree = "<group>"; };
+		3B3139CE142E695200401392 /* GCPasscodePatternControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCPasscodePatternControl.h; sourceTree = "<group>"; };
+		3B3139CF142E695200401392 /* GCPasscodePatternControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCPasscodePatternControl.m; sourceTree = "<group>"; };
 		3B7D74C0125FC41B00376B2C /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -100,8 +103,10 @@
 		3B000B70142D0C8000A52F28 /* pinview */ = {
 			isa = PBXGroup;
 			children = (
-				3B000B71142D0C8000A52F28 /* GCPINViewController.h */,
-				3B000B72142D0C8000A52F28 /* GCPINViewController.m */,
+				3B000B71142D0C8000A52F28 /* GCPasscodeViewController.h */,
+				3B000B72142D0C8000A52F28 /* GCPasscodeViewController.m */,
+				3B3139CE142E695200401392 /* GCPasscodePatternControl.h */,
+				3B3139CF142E695200401392 /* GCPasscodePatternControl.m */,
 				3B000B73142D0C8000A52F28 /* PINBox.png */,
 				3B000B74142D0C8000A52F28 /* PINBox@2x.png */,
 				3B000B75142D0C8000A52F28 /* PINViewDefault.xib */,
@@ -178,7 +183,8 @@
 			files = (
 				3B000B6D142D0C6500A52F28 /* main.m in Sources */,
 				3B000B6E142D0C6500A52F28 /* PCAppDelegate.m in Sources */,
-				3B000B76142D0C8000A52F28 /* GCPINViewController.m in Sources */,
+				3B000B76142D0C8000A52F28 /* GCPasscodeViewController.m in Sources */,
+				3B3139D0142E695200401392 /* GCPasscodePatternControl.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
