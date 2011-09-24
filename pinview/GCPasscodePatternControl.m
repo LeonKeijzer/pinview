@@ -94,15 +94,6 @@
 }
 
 #pragma mark - object methods
-- (id)initWithFrame:(CGRect)frame {
-    self = [super initWithFrame:frame];
-    if (self) {
-        self.backgroundColor = [UIColor redColor];
-        [self setNeedsLayout];
-        [self setNeedsDisplay];
-    }
-    return self;
-}
 - (void)dealloc {
     self.touch = nil;
     self.points = nil;
@@ -119,7 +110,6 @@
             NSNumber *index = [NSNumber numberWithInteger:idx];
             if (![self.pattern containsObject:index]) {
                 [self.pattern addObject:index];
-                [self sendActionsForControlEvents:UIControlEventValueChanged];
             }
         }
     }];
@@ -172,10 +162,10 @@
             point = [[self.points objectAtIndex:index] CGPointValue];
             CGContextAddLineToPoint(context, point.x, point.y);
         }
-    }
-    if (self.touch) {
-        CGPoint location = [self.touch locationInView:self];
-        CGContextAddLineToPoint(context, location.x, location.y);
+        if (self.touch) {
+            CGPoint location = [self.touch locationInView:self];
+            CGContextAddLineToPoint(context, location.x, location.y);
+        }
     }
     CGContextStrokePath(context);
     
@@ -216,6 +206,7 @@
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
     if ([touches containsObject:self.touch]) {
         self.touch = nil;
+        self.pattern = nil;
         [self setNeedsDisplay];
     }
 }
@@ -223,6 +214,7 @@
     if ([touches containsObject:self.touch]) {
         self.touch = nil;
         [self setNeedsDisplay];
+        [self sendActionsForControlEvents:UIControlEventValueChanged];
     }
 }
 
