@@ -122,7 +122,7 @@
     CGPoint location = [self.touch locationInView:self];
     [self.points enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         CGPoint point = [obj CGPointValue];
-        CGRect rect = [GCPasscodePatternControl innerDotRectForPoint:point];
+        CGRect rect = [GCPasscodePatternControl outerDotRectForPoint:point];
         if (CGRectContainsPoint(rect, location)) {
             *stop = YES;
             NSNumber *index = [NSNumber numberWithInteger:idx];

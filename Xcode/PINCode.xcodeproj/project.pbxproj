@@ -211,6 +211,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -218,6 +219,7 @@
 				GCC_PREFIX_HEADER = PINCode/PINCode_Prefix.pch;
 				INFOPLIST_FILE = "PINCode/PINCode-Info.plist";
 				PRODUCT_NAME = PINCode;
+				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
 		};
