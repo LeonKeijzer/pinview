@@ -234,7 +234,7 @@
         self.touch = [touches anyObject];
         self.pattern = [NSMutableArray array];
         [self updatePattern];
-        [self setNeedsDisplay];
+        self.color = GCPasscodePatternControlColorWhite;
     }
 }
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
