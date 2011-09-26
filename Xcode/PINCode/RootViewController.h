@@ -8,8 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
-@interface RootViewController : UIViewController <UIActionSheetDelegate>
+@interface RootViewController : UIViewController
 
-- (IBAction)setPasscode;
+- (IBAction)setPatternPasscode;
+- (IBAction)checkPatternPasscode;
 
 @end

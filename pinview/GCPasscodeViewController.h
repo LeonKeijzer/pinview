@@ -8,9 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-// Block called on `viewDidLoad`.
-//typedef void (^GCPINViewControllerViewDidLoadBlock) ();
-
 // Define the availble modes for the controller to use.
 typedef enum {
     
@@ -23,20 +20,18 @@ typedef enum {
 } GCPasscodeViewControllerMode;
 
 // Block called when a passcode has been created.
-typedef void (^GCPatternPasscodeCreateBlock) (NSString *code);
+typedef void (^GCPasscodeCreateBlock) (NSString *code);
 
 // Block called when a passcode should be verified.
-typedef BOOL (^GCPatternPasscodeVerifyBlock) (NSString *code);
+typedef BOOL (^GCPasscodeVerifyBlock) (NSString *code);
 
-/*
- 
- */
+// Abstract view controller class for entering passcodes.
 @interface GCPasscodeViewController : UIViewController
 
-// Passcode controller mode.
+// Functional properties.
 @property (nonatomic, readonly, assign) GCPasscodeViewControllerMode mode;
-@property (nonatomic, copy) GCPatternPasscodeCreateBlock createBlock;
-@property (nonatomic, copy) GCPatternPasscodeVerifyBlock verifyBlock;
+@property (nonatomic, copy) GCPasscodeCreateBlock createBlock;
+@property (nonatomic, copy) GCPasscodeVerifyBlock verifyBlock;
 
 // Create a passcode view controller with the given mode.
 - (id)initWithMode:(GCPasscodeViewControllerMode)mode;

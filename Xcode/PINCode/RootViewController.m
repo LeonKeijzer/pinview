@@ -12,42 +12,23 @@
 
 @implementation RootViewController
 
-#pragma mark - actions
-- (IBAction)setPasscode {
-    UIActionSheet *sheet = [[UIActionSheet alloc]
-                            initWithTitle:nil
-                            delegate:self
-                            cancelButtonTitle:@"Cancel"
-                            destructiveButtonTitle:nil
-                            otherButtonTitles:@"Pattern", @"Text", nil];
-    [sheet showInView:self.view];
-    [sheet release];
+- (IBAction)setPatternPasscode {
+    GCPatternPasscodeViewController *controller = [[GCPatternPasscodeViewController alloc]
+                                                   initWithMode:GCPasscodeViewControllerModeCreate];
+    [controller setCreateBlock:^(NSString *string) {
+        NSLog(@"set passcode: %@", string);
+    }];
+    [controller presentFromViewController:self animated:YES];
+    [controller release];
 }
-
-#pragma mark - action sheet
-- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
-    if (buttonIndex == actionSheet.cancelButtonIndex) {
-        return;
-    }
-    if (buttonIndex >= actionSheet.numberOfButtons) {
-        return;
-    }
-    NSString *title = [actionSheet buttonTitleAtIndex:buttonIndex];
-    if ([title isEqualToString:@"Pattern"]) {
-        
-        GCPatternPasscodeViewController *controller = [[GCPatternPasscodeViewController alloc]
-                                                       initWithNibName:nil
-                                                       bundle:nil];
-        [controller setCreateBlock:^(NSString *string) {
-            NSLog(@"set passcode: %@", string);
-        }];
-        [controller presentFromViewController:self animated:YES];
-        [controller release];
-        
-    }
-    else if ([title isEqualToString:@"Text"]) {
-        
-    }
+- (IBAction)checkPatternPasscode {
+    GCPatternPasscodeViewController *controller = [[GCPatternPasscodeViewController alloc]
+                                                   initWithMode:GCPasscodeViewControllerModeVerify];
+    [controller setVerifyBlock:^(NSString *string) {
+        return [string isEqualToString:@"0125"];
+    }];
+    [controller presentFromViewController:self animated:YES];
+    [controller release];
 }
 
 @end
