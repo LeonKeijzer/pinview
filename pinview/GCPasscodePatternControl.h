@@ -8,7 +8,15 @@
 
 #import <UIKit/UIKit.h>
 
+typedef enum {
+    GCPasscodePatternControlColorWhite,
+    GCPasscodePatternControlColorGreen,
+    GCPasscodePatternControlColorRed,
+} GCPasscodePatternControlColor;
+
 @interface GCPasscodePatternControl : UIControl
+
+@property (nonatomic, assign) GCPasscodePatternControlColor color;
 
 - (NSString *)patternString;
 - (void)clearPattern;

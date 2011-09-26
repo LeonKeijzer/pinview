@@ -32,6 +32,7 @@
 // color utilities
 + (CGColorRef)greenColor;
 + (CGColorRef)whiteColor;
++ (CGColorRef)redColor;
 + (CGColorRef)translucentBlackColor;
 + (CGColorRef)translucentWhiteColor;
 
@@ -42,6 +43,7 @@
 @synthesize touch = __touch;
 @synthesize points = __points;
 @synthesize pattern = __pattern;
+@synthesize color = __color;
 
 #pragma mark - class methods
 + (CGRect)innerDotRectForPoint:(CGPoint)point {
@@ -74,6 +76,15 @@
     });
     return color;
 }
++ (CGColorRef)redColor {
+    static CGColorRef color = NULL;
+    static dispatch_once_t token;
+    dispatch_once(&token, ^{
+        color = [[UIColor colorWithRed:1.0 green:0.0 blue:0.0 alpha:1.0] CGColor];
+        CGColorRetain(color);
+    });
+    return color;
+}
 + (CGColorRef)translucentBlackColor {
     static CGColorRef color = NULL;
     static dispatch_once_t token;
@@ -94,6 +105,13 @@
 }
 
 #pragma mark - object methods
+- (id)initWithFrame:(CGRect)frame {
+    self = [super initWithFrame:frame];
+    if (self) {
+        self.color = GCPasscodePatternControlColorWhite;
+    }
+    return self;
+}
 - (void)dealloc {
     self.touch = nil;
     self.points = nil;
@@ -123,6 +141,11 @@
 }
 - (void)clearPattern {
     self.pattern = nil;
+    [self setNeedsDisplay];
+}
+- (void)setColor:(GCPasscodePatternControlColor)color {
+    if (color == __color) { return; }
+    __color = color;
     [self setNeedsDisplay];
 }
 
@@ -180,12 +203,25 @@
         CGRect outerRect = [GCPasscodePatternControl outerDotRectForPoint:point];
         CGContextSetFillColorWithColor(context, [GCPasscodePatternControl translucentBlackColor]);
         CGContextFillEllipseInRect(context, outerRect);
-        CGContextSetFillColorWithColor(context, [GCPasscodePatternControl whiteColor]);
+        if (self.color == GCPasscodePatternControlColorRed) {
+            CGContextSetFillColorWithColor(context, [GCPasscodePatternControl redColor]);
+        }
+        else if (self.color == GCPasscodePatternControlColorGreen) {
+            CGContextSetFillColorWithColor(context, [GCPasscodePatternControl greenColor]);
+        }
+        else {
+            CGContextSetFillColorWithColor(context, [GCPasscodePatternControl whiteColor]);
+        }
         CGContextFillEllipseInRect(context, [GCPasscodePatternControl innerDotRectForPoint:point]);
         if (count > 0) {
             NSNumber *index = [NSNumber numberWithUnsignedInteger:idx];
             if ([[self.pattern objectAtIndex:0] isEqualToNumber:index]) {
-                CGContextSetStrokeColorWithColor(context, [GCPasscodePatternControl greenColor]);
+                if (self.color == GCPasscodePatternControlColorRed) {
+                    CGContextSetStrokeColorWithColor(context, [GCPasscodePatternControl redColor]);
+                }
+                else {
+                    CGContextSetStrokeColorWithColor(context, [GCPasscodePatternControl greenColor]);
+                }
                 CGContextStrokeEllipseInRect(context, outerRect);
             }
         }
