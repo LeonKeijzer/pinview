@@ -11,5 +11,6 @@
 @interface GCPasscodePatternControl : UIControl
 
 - (NSString *)patternString;
+- (void)clearPattern;
 
 @end

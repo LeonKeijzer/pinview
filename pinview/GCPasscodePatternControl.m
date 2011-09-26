@@ -121,6 +121,10 @@
     }];
     return pattern;
 }
+- (void)clearPattern {
+    self.pattern = nil;
+    [self setNeedsDisplay];
+}
 
 #pragma mark - layout
 - (void)layoutSubviews {
@@ -206,8 +210,7 @@
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
     if ([touches containsObject:self.touch]) {
         self.touch = nil;
-        self.pattern = nil;
-        [self setNeedsDisplay];
+        [self clearPattern];
     }
 }
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
