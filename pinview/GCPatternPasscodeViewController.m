@@ -43,10 +43,16 @@
     [super dealloc];
 }
 - (void)patternControlValueChanged:(GCPasscodePatternControl *)control {
+    
+    // creating a passcode
     if (self.mode == GCPasscodeViewControllerModeCreate) {
+        
+        // generate frames
         CGRect middle = control.frame;
         CGRect right = CGRectOffset(middle, self.view.bounds.size.width, 0.0);
         CGRect left = CGRectOffset(middle, self.view.bounds.size.width * -1.0, 0.0);
+        
+        // first control triggered this event, page to second control
         if (control == self.firstPattern) {
             self.patternString = [control patternString];
             self.secondPattern = [GCPatternPasscodeViewController patternControlWithFrame:right];
@@ -62,13 +68,10 @@
              }
              completion:nil];
         }
+        
+        // second control triggered, verify the passcode
         else if (control == self.secondPattern) {
-            if ([self.patternString isEqualToString:[control patternString]]) {
-                if (self.createBlock) { self.createBlock(self.patternString); }
-                control.color = GCPasscodePatternControlColorGreen;
-                [self dismissAfterDelay:0.5];
-            }
-            else {
+            void (^resetBlock) () = ^{
                 self.patternString = nil;
                 [self.firstPattern clearPattern];
                 control.color = GCPasscodePatternControlColorRed;
@@ -85,13 +88,34 @@
                      [self.secondPattern removeFromSuperview];
                      self.secondPattern = nil;
                  }];
+            };
+            if ([self.patternString isEqualToString:[control patternString]]) {
+                BOOL valid = NO;
+                if (self.passcodeBlock) {
+                    valid = self.passcodeBlock(self.patternString);
+                }
+                if (valid) {
+                    control.color = GCPasscodePatternControlColorGreen;
+                    [self dismissAfterDelay:0.5];
+                }
+                else {
+                    resetBlock();
+                }
+            }
+            else {
+                resetBlock();
             }
         }
+        
     }
+    
+    // try logging in with the passcode
     else {
-        BOOL verified = NO;
-        if (self.verifyBlock) { verified = self.verifyBlock([control patternString]); }
-        if (verified) {
+        BOOL valid = NO;
+        if (self.passcodeBlock) {
+            valid = self.passcodeBlock([control patternString]);
+        }
+        if (valid) {
             control.color = GCPasscodePatternControlColorGreen;
             [self dismissAfterDelay:0.5];
         }
@@ -108,11 +132,7 @@
             });
         }
     }
-}
-- (void)presentFromViewController:(UIViewController *)controller animated:(BOOL)animated {
-	UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:self];
-	[controller presentModalViewController:navController animated:animated];
-	[navController release];
+    
 }
 
 #pragma mark - view lifecycle

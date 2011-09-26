@@ -15,8 +15,9 @@
 - (IBAction)setPatternPasscode {
     GCPatternPasscodeViewController *controller = [[GCPatternPasscodeViewController alloc]
                                                    initWithMode:GCPasscodeViewControllerModeCreate];
-    [controller setCreateBlock:^(NSString *string) {
-        NSLog(@"set passcode: %@", string);
+    [controller setPasscodeBlock:^ BOOL (NSString *string) {
+        NSLog(@"attempting to set passcode: %@", string);
+        return ([string length] > 3);
     }];
     [controller presentFromViewController:self animated:YES];
     [controller release];
@@ -24,7 +25,7 @@
 - (IBAction)checkPatternPasscode {
     GCPatternPasscodeViewController *controller = [[GCPatternPasscodeViewController alloc]
                                                    initWithMode:GCPasscodeViewControllerModeVerify];
-    [controller setVerifyBlock:^(NSString *string) {
+    [controller setPasscodeBlock:^(NSString *string) {
         return [string isEqualToString:@"0125"];
     }];
     [controller presentFromViewController:self animated:YES];

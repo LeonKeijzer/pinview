@@ -11,27 +11,33 @@
 // Define the availble modes for the controller to use.
 typedef enum {
     
-    // create a new passcode
+    // Create a new passcode
     GCPasscodeViewControllerModeCreate = 0,
     
-    // used to login given that the provided passcode is correct
+    // Standard login controller
     GCPasscodeViewControllerModeVerify
     
 } GCPasscodeViewControllerMode;
 
-// Block called when a passcode has been created.
-typedef void (^GCPasscodeCreateBlock) (NSString *code);
-
-// Block called when a passcode should be verified.
-typedef BOOL (^GCPasscodeVerifyBlock) (NSString *code);
+/*
+ Block called when a passcode event occurs.
+ 
+ If the controller is in `create` mode the code being passed in is what the user
+ would like to save. Returning `NO` will force the user to provide another
+ passcode. You can do input validation here and present alerts if necessary.
+ 
+ If the controller is in `verify` mode the code passed in is what the user is
+ attempting to authenticate with. You can perform custom logic here, like a
+ "number of attempts" counter.
+ */
+typedef BOOL (^GCPasscodeBlock) (NSString *code);
 
 // Abstract view controller class for entering passcodes.
 @interface GCPasscodeViewController : UIViewController
 
-// Functional properties.
+// properties
 @property (nonatomic, readonly, assign) GCPasscodeViewControllerMode mode;
-@property (nonatomic, copy) GCPasscodeCreateBlock createBlock;
-@property (nonatomic, copy) GCPasscodeVerifyBlock verifyBlock;
+@property (nonatomic, copy) GCPasscodeBlock passcodeBlock;
 
 // Create a passcode view controller with the given mode.
 - (id)initWithMode:(GCPasscodeViewControllerMode)mode;

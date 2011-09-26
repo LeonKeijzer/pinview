@@ -17,8 +17,7 @@
 @implementation GCPasscodeViewController
 
 @synthesize mode = __mode;
-@synthesize createBlock = __createBlock;
-@synthesize verifyBlock = __verifyBlock;
+@synthesize passcodeBlock = __passcodeBlock;
 
 //@synthesize messageLabel = __messageLabel;
 //@synthesize errorLabel = __errorLabel;
@@ -57,8 +56,7 @@
 //    return self;
 //}
 - (void)dealloc {
-    self.createBlock = nil;
-    self.verifyBlock = nil;
+    self.passcodeBlock = nil;
 //    [[NSNotificationCenter defaultCenter]
 //     removeObserver:self
 //     name:UITextFieldTextDidChangeNotification
