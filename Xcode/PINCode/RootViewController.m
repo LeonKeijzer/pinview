@@ -8,6 +8,8 @@
 
 #import "RootViewController.h"
 
+#import "GCPatternPasscodeViewController.h"
+
 @implementation RootViewController
 
 #pragma mark - actions
@@ -33,10 +35,12 @@
     NSString *title = [actionSheet buttonTitleAtIndex:buttonIndex];
     if ([title isEqualToString:@"Pattern"]) {
         
-        GCPasscodeViewController *controller = [[GCPasscodeViewController alloc]
-                                                initWithNibName:@"PasscodePatternViewDefault"
-                                                bundle:nil
-                                                mode:GCPasscodeViewControllerModeCreate];
+        GCPatternPasscodeViewController *controller = [[GCPatternPasscodeViewController alloc]
+                                                       initWithNibName:nil
+                                                       bundle:nil];
+        [controller setCreateBlock:^(NSString *string) {
+            NSLog(@"set passcode: %@", string);
+        }];
         [controller presentFromViewController:self animated:YES];
         [controller release];
         

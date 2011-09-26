@@ -9,52 +9,64 @@
 #import <AudioToolbox/AudioToolbox.h>
 
 #import "GCPasscodeViewController.h"
-#import "GCPasscodePatternControl.h"
 
 @interface GCPasscodeViewController ()
-@property (nonatomic, assign) GCPasscodeViewControllerMode mode;
+@property (nonatomic, readwrite, assign) GCPasscodeViewControllerMode mode;
 @end
 
 @implementation GCPasscodeViewController
 
 @synthesize mode = __mode;
-@synthesize messageLabel = __messageLabel;
-@synthesize errorLabel = __errorLabel;
-@synthesize textField = __textField;
-@synthesize patternControl = __patternControl;
-@synthesize viewDidLoadBlock = __viewDidLoad;
-@synthesize backgroundView = __backgroundView;
+@synthesize createBlock = __createBlock;
+@synthesize verifyBlock = __verifyBlock;
+
+//@synthesize messageLabel = __messageLabel;
+//@synthesize errorLabel = __errorLabel;
+//@synthesize textField = __textField;
+//@synthesize viewDidLoadBlock = __viewDidLoad;
+//@synthesize backgroundView = __backgroundView;
 
 #pragma mark - object methods
-- (id)initWithNibName:(NSString *)nib
-               bundle:(NSBundle *)bundle
-                 mode:(GCPasscodeViewControllerMode)mode {
-    self = [super initWithNibName:nib bundle:bundle];
+- (id)initWithMode:(GCPasscodeViewControllerMode)mode {
+    NSAssert(mode == GCPasscodeViewControllerModeCreate || mode == GCPasscodeViewControllerModeCreate,
+             @"Invalid passcode mode");
+    self = [super initWithNibName:nil bundle:nil];
     if (self) {
         self.mode = mode;
-        if (self.mode == GCPasscodeViewControllerModeCreate) {
-            self.title = @"Create Passcode";
-        }
-        else {
-            self.title = @"Login";
-        }
-        [[NSNotificationCenter defaultCenter]
-         addObserver:self
-         selector:@selector(textFieldTextDidChange:)
-         name:UITextFieldTextDidChangeNotification
-         object:nil];
     }
     return self;
 }
+//- (id)initWithNibName:(NSString *)nib
+//               bundle:(NSBundle *)bundle
+//                 mode:(GCPasscodeViewControllerMode)mode {
+//    self = [super initWithNibName:nib bundle:bundle];
+//    if (self) {
+//        self.mode = mode;
+//        if (self.mode == GCPasscodeViewControllerModeCreate) {
+//            self.title = @"Create Passcode";
+//        }
+//        else {
+//            self.title = @"Login";
+//        }
+//        [[NSNotificationCenter defaultCenter]
+//         addObserver:self
+//         selector:@selector(textFieldTextDidChange:)
+//         name:UITextFieldTextDidChangeNotification
+//         object:nil];
+//    }
+//    return self;
+//}
 - (void)dealloc {
-    [[NSNotificationCenter defaultCenter]
-     removeObserver:self
-     name:UITextFieldTextDidChangeNotification
-     object:nil];
-    self.textField = nil;
-    self.errorLabel = nil;
-    self.messageLabel = nil;
-    self.viewDidLoadBlock = nil;
+    self.createBlock = nil;
+    self.verifyBlock = nil;
+//    [[NSNotificationCenter defaultCenter]
+//     removeObserver:self
+//     name:UITextFieldTextDidChangeNotification
+//     object:nil];
+//    self.textField = nil;
+//    self.errorLabel = nil;
+//    self.messageLabel = nil;
+//    self.viewDidLoadBlock = nil;
     [super dealloc];
 }
 - (void)presentFromViewController:(UIViewController *)controller animated:(BOOL)animated {
@@ -62,50 +74,51 @@
 	[controller presentModalViewController:navController animated:animated];
 	[navController release];
 }
+- (void)dismissAfterDelay:(double)delay {
+    dispatch_time_t time = dispatch_time(DISPATCH_TIME_NOW, delay * NSEC_PER_SEC);
+    dispatch_after(time, dispatch_get_main_queue(), ^(void){
+        [self dismissModalViewControllerAnimated:YES];
+    });
+}
 
 #pragma mark - view lifecycle
 - (void)viewDidLoad {
 	[super viewDidLoad];
     
     // default view state
-    UIImage *image = [UIImage imageNamed:@"PINBox"];
-    image = [image stretchableImageWithLeftCapWidth:25 topCapHeight:0];
-    self.textField.background = image;
-    self.textField.keyboardType = UIKeyboardTypeNumberPad;
-    self.textField.secureTextEntry = YES;
-    [self.patternControl addTarget:self action:@selector(patternControlValueChanged:) forControlEvents:UIControlEventValueChanged];
-    self.errorLabel.hidden = YES;
-    
-    // perform user actions
-    if (self.viewDidLoadBlock) {
-        self.viewDidLoadBlock();
-    }
-    
-    [self.view addSubview:self.backgroundView];
-    [self.view sendSubviewToBack:self.backgroundView];
-	
-    // configure text field
-    self.textField.delegate = self;
-    [self.textField becomeFirstResponder];
+//    UIImage *image = [UIImage imageNamed:@"PINBox"];
+//    image = [image stretchableImageWithLeftCapWidth:25 topCapHeight:0];
+//    self.textField.background = image;
+//    self.textField.keyboardType = UIKeyboardTypeNumberPad;
+//    self.textField.secureTextEntry = YES;
+//    self.errorLabel.hidden = YES;
+//    
+//    // perform user actions
+//    if (self.viewDidLoadBlock) {
+//        self.viewDidLoadBlock();
+//    }
+//    
+//    [self.view addSubview:self.backgroundView];
+//    [self.view sendSubviewToBack:self.backgroundView];
+//	
+//    // configure text field
+//    self.textField.delegate = self;
+//    [self.textField becomeFirstResponder];
     
 }
 - (void)viewDidUnload {
     [super viewDidUnload];
-    self.textField = nil;
-    self.errorLabel = nil;
-    self.messageLabel = nil;
+//    self.textField = nil;
+//    self.errorLabel = nil;
+//    self.messageLabel = nil;
 }
 
-#pragma mark - pattern control
-- (void)patternControlValueChanged:(GCPasscodePatternControl *)control {
-    NSLog(@"%@", [control patternString]);
-}
 
 #pragma mark - text field methods
 - (void)textFieldTextDidChange:(NSNotification *)notif {
-    if (self.textField && self.textField == [notif object]) {
-        
-    }
+//    if (self.textField && self.textField == [notif object]) {
+//        
+//    }
     
     
 //	UITextField *field = [notif object];
