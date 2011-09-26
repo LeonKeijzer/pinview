@@ -96,8 +96,16 @@
             [self dismissAfterDelay:0.5];
         }
         else {
-            control.color = GCPasscodePatternControlColorRed;
+            AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
             [control clearPattern];
+            control.color = GCPasscodePatternControlColorRed;
+            control.userInteractionEnabled = NO;
+            double delay = 0.5;
+            dispatch_time_t time = dispatch_time(DISPATCH_TIME_NOW, delay * NSEC_PER_SEC);
+            dispatch_after(time, dispatch_get_main_queue(), ^(void){
+                control.color = GCPasscodePatternControlColorWhite;
+                control.userInteractionEnabled = YES;
+            });
         }
     }
 }

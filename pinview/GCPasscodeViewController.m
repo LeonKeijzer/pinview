@@ -28,7 +28,7 @@
 
 #pragma mark - object methods
 - (id)initWithMode:(GCPasscodeViewControllerMode)mode {
-    NSAssert(mode == GCPasscodeViewControllerModeCreate || mode == GCPasscodeViewControllerModeCreate,
+    NSAssert(mode == GCPasscodeViewControllerModeCreate || mode == GCPasscodeViewControllerModeVerify,
              @"Invalid passcode mode");
     self = [super initWithNibName:nil bundle:nil];
     if (self) {
