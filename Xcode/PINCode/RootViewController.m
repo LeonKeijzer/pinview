@@ -9,6 +9,7 @@
 #import "RootViewController.h"
 
 #import "GCPatternPasscodeViewController.h"
+#import "GCTextPasscodeViewController.h"
 
 @implementation RootViewController
 
@@ -23,13 +24,27 @@
     [controller release];
 }
 - (IBAction)checkPatternPasscode {
-    GCPatternPasscodeViewController *controller = [[GCPatternPasscodeViewController alloc]
-                                                   initWithMode:GCPasscodeViewControllerModeVerify];
+    GCPasscodeViewController *controller = [[GCPatternPasscodeViewController alloc]
+                                            initWithMode:GCPasscodeViewControllerModeVerify];
     [controller setPasscodeBlock:^(NSString *string) {
         return [string isEqualToString:@"0125"];
     }];
     [controller presentFromViewController:self animated:YES];
     [controller release];
+}
+
+- (IBAction)setTextPasscode {
+    GCPasscodeViewController *controller = [[GCTextPasscodeViewController alloc]
+                                            initWithMode:GCPasscodeViewControllerModeCreate];
+    [controller setPasscodeBlock:^ BOOL (NSString *string) {
+        NSLog(@"attempting to set passcode: %@", string);
+        return ([string length] > 3);
+    }];
+    [controller presentFromViewController:self animated:YES];
+    [controller release];
+}
+- (IBAction)checkTextPasscode {
+    
 }
 
 @end

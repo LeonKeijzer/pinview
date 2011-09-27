@@ -21,6 +21,7 @@
 		3B3139D7142E7DE300401392 /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3B3139D5142E7DE300401392 /* RootViewController.m */; };
 		3B3139D8142E7DE300401392 /* RootViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3B3139D6142E7DE300401392 /* RootViewController.xib */; };
 		3B7D74C1125FC41B00376B2C /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B7D74C0125FC41B00376B2C /* AudioToolbox.framework */; };
+		3BA2E5EC14317B1500350DAA /* GCTextPasscodeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3BA2E5EB14317B1500350DAA /* GCTextPasscodeViewController.m */; };
 		3BAF970D14300336006B0C31 /* GCPatternPasscodeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3BAF970C14300336006B0C31 /* GCPatternPasscodeViewController.m */; };
 /* End PBXBuildFile section */
 
@@ -46,6 +47,8 @@
 		3B3139D5142E7DE300401392 /* RootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RootViewController.m; sourceTree = "<group>"; };
 		3B3139D6142E7DE300401392 /* RootViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RootViewController.xib; sourceTree = "<group>"; };
 		3B7D74C0125FC41B00376B2C /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		3BA2E5EA14317B1500350DAA /* GCTextPasscodeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCTextPasscodeViewController.h; sourceTree = "<group>"; };
+		3BA2E5EB14317B1500350DAA /* GCTextPasscodeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCTextPasscodeViewController.m; sourceTree = "<group>"; };
 		3BAF970B14300336006B0C31 /* GCPatternPasscodeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCPatternPasscodeViewController.h; sourceTree = "<group>"; };
 		3BAF970C14300336006B0C31 /* GCPatternPasscodeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCPatternPasscodeViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -120,6 +123,8 @@
 				3BAF970C14300336006B0C31 /* GCPatternPasscodeViewController.m */,
 				3B3139CE142E695200401392 /* GCPasscodePatternControl.h */,
 				3B3139CF142E695200401392 /* GCPasscodePatternControl.m */,
+				3BA2E5EA14317B1500350DAA /* GCTextPasscodeViewController.h */,
+				3BA2E5EB14317B1500350DAA /* GCTextPasscodeViewController.m */,
 				3B000B73142D0C8000A52F28 /* PINBox.png */,
 				3B000B74142D0C8000A52F28 /* PINBox@2x.png */,
 				3B000B75142D0C8000A52F28 /* PINViewDefault.xib */,
@@ -201,6 +206,7 @@
 				3B3139D0142E695200401392 /* GCPasscodePatternControl.m in Sources */,
 				3B3139D7142E7DE300401392 /* RootViewController.m in Sources */,
 				3BAF970D14300336006B0C31 /* GCPatternPasscodeViewController.m in Sources */,
+				3BA2E5EC14317B1500350DAA /* GCTextPasscodeViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

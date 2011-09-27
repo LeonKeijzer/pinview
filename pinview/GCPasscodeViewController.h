@@ -54,7 +54,7 @@ typedef BOOL (^GCPasscodeBlock) (NSString *code);
 //@property (nonatomic, retain) IBOutlet UIView *backgroundView;
 //
 //// used in text mode
-//@property (nonatomic, retain) IBOutlet UITextField *textField;
+//
 
 // executed every time the view is loaded
 //@property (nonatomic, copy) GCPINViewControllerViewDidLoadBlock viewDidLoadBlock;

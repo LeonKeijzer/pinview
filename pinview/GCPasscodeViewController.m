@@ -21,7 +21,7 @@
 
 //@synthesize messageLabel = __messageLabel;
 //@synthesize errorLabel = __errorLabel;
-//@synthesize textField = __textField;
+//
 //@synthesize viewDidLoadBlock = __viewDidLoad;
 //@synthesize backgroundView = __backgroundView;
 
@@ -47,21 +47,13 @@
 //        else {
 //            self.title = @"Login";
 //        }
-//        [[NSNotificationCenter defaultCenter]
-//         addObserver:self
-//         selector:@selector(textFieldTextDidChange:)
-//         name:UITextFieldTextDidChangeNotification
-//         object:nil];
+
 //    }
 //    return self;
 //}
 - (void)dealloc {
     self.passcodeBlock = nil;
-//    [[NSNotificationCenter defaultCenter]
-//     removeObserver:self
-//     name:UITextFieldTextDidChangeNotification
-//     object:nil];
-//    self.textField = nil;
+
 //    self.errorLabel = nil;
 //    self.messageLabel = nil;
 //    self.viewDidLoadBlock = nil;
@@ -106,50 +98,9 @@
 }
 - (void)viewDidUnload {
     [super viewDidUnload];
-//    self.textField = nil;
 //    self.errorLabel = nil;
 //    self.messageLabel = nil;
 }
 
-
-#pragma mark - text field methods
-- (void)textFieldTextDidChange:(NSNotification *)notif {
-//    if (self.textField && self.textField == [notif object]) {
-//        
-//    }
-    
-    
-//	UITextField *field = [notif object];
-//	if (field == inputField) {
-//		NSString *newText = field.text;
-//		
-//		if ([newText length] == 4) {
-//			NSString *toValidate = [field.text copy];
-//			BOOL valid = [delegate pinView:self validateCode:toValidate];
-//			[toValidate release];
-//			if (!valid) {
-//				AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
-//				[self setErrorLabelHidden:NO animated:YES];
-//				inputField.text = @"";
-//			}
-//		}
-//		else {
-//			[PINText release];
-//			PINText = [newText copy];
-//		}
-//		
-//		[self updatePINDisplay];
-//	}
-}
-- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
-//	if ([PINText length] == 4 && [string length] > 0) {
-//		return NO;
-//	}
-//	else {
-//		[self setErrorLabelHidden:YES animated:YES];
-//		return YES;
-//	}
-    return YES;
-}
 
 @end

@@ -13,4 +13,7 @@
 - (IBAction)setPatternPasscode;
 - (IBAction)checkPatternPasscode;
 
+- (IBAction)setTextPasscode;
+- (IBAction)checkTextPasscode;
+
 @end
