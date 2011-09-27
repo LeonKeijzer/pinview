@@ -133,6 +133,7 @@
                 NSNumber *number = [NSNumber numberWithInteger:index];
                 if (![self.pattern containsObject:number]) {
                     [self.pattern addObject:number];
+                    [self setNeedsDisplay];
                 }
             }
         }
@@ -150,7 +151,6 @@
     [self setNeedsDisplay];
 }
 - (void)setColor:(GCPasscodePatternControlColor)color {
-    if (color == __color) { return; }
     __color = color;
     [self setNeedsDisplay];
 }
@@ -193,10 +193,6 @@
             point = [[self.points objectAtIndex:index] CGPointValue];
             CGContextAddLineToPoint(context, point.x, point.y);
         }
-        if (self.touch) {
-            CGPoint location = [self.touch locationInView:self];
-            CGContextAddLineToPoint(context, location.x, location.y);
-        }
     }
     CGContextStrokePath(context);
     
@@ -237,22 +233,19 @@
     if (self.touch == nil) {
         self.touch = [touches anyObject];
         self.pattern = [NSMutableArray array];
-        [self updatePattern];
         self.color = GCPasscodePatternControlColorWhite;
-        [self setNeedsDisplay];
+        [self updatePattern];
     }
 }
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
     if ([touches containsObject:self.touch]) {
         [self updatePattern];
-        [self setNeedsDisplay];
     }
 }
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
     if ([touches containsObject:self.touch]) {
         self.touch = nil;
         [self clearPattern];
-        [self setNeedsDisplay];
     }
 }
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
@@ -261,7 +254,6 @@
         if ([self.pattern count]) {
             [self sendActionsForControlEvents:UIControlEventValueChanged];
         }
-        [self setNeedsDisplay];
     }
 }
 
