@@ -8,8 +8,10 @@
 
 #import "GCPasscodePatternControl.h"
 
-// white dot size
+// dimensions (compile constants for now)
 #define kDotSize 40.0
+#define kNumberOfRows 3
+#define kNumberOfColumns 3
 
 @interface GCPasscodePatternControl ()
 
@@ -120,17 +122,21 @@
 }
 - (void)updatePattern {
     CGPoint location = [self.touch locationInView:self];
-    [self.points enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        CGPoint point = [obj CGPointValue];
-        CGRect rect = [GCPasscodePatternControl outerDotRectForPoint:point];
-        if (CGRectContainsPoint(rect, location)) {
-            *stop = YES;
-            NSNumber *index = [NSNumber numberWithInteger:idx];
-            if (![self.pattern containsObject:index]) {
-                [self.pattern addObject:index];
+    if (CGRectContainsPoint(self.bounds, location)) {
+        NSInteger row = location.y / (self.bounds.size.width / (CGFloat)kNumberOfRows);
+        NSInteger column = location.x / (self.bounds.size.height / (CGFloat)kNumberOfColumns);
+        NSInteger index = row * kNumberOfRows + column;
+        if (index >= 0 && index < [self.points count]) {
+            CGPoint point = [[self.points objectAtIndex:index] CGPointValue];
+            CGRect rect = [GCPasscodePatternControl outerDotRectForPoint:point];
+            if (CGRectContainsPoint(rect, location)) {
+                NSNumber *number = [NSNumber numberWithInteger:index];
+                if (![self.pattern containsObject:number]) {
+                    [self.pattern addObject:number];
+                }
             }
         }
-    }];
+    }
 }
 - (NSString *)patternString {
     NSMutableString *pattern = [NSMutableString stringWithCapacity:[self.pattern count]];
@@ -152,13 +158,11 @@
 #pragma mark - layout
 - (void)layoutSubviews {
     [super layoutSubviews];
-    static NSUInteger numberOfColumns = 3;
-    static NSUInteger numberOfRows = 3;
-    CGFloat gridWidth = self.bounds.size.width / (CGFloat)numberOfColumns;
-    CGFloat gridHeight = self.bounds.size.height / (CGFloat)numberOfRows;
-    NSMutableArray *array = [NSMutableArray arrayWithCapacity:(numberOfRows * numberOfColumns)];
-    for (NSUInteger i = 0; i < numberOfRows; i++) {
-        for (NSUInteger j = 0; j < numberOfColumns; j++) {
+    CGFloat gridWidth = self.bounds.size.width / (CGFloat)kNumberOfColumns;
+    CGFloat gridHeight = self.bounds.size.height / (CGFloat)kNumberOfRows;
+    NSMutableArray *array = [NSMutableArray arrayWithCapacity:(kNumberOfRows * kNumberOfColumns)];
+    for (NSUInteger i = 0; i < kNumberOfRows; i++) {
+        for (NSUInteger j = 0; j < kNumberOfColumns; j++) {
             CGPoint point = CGPointMake(gridWidth * (CGFloat)j + gridWidth / 2.0, gridHeight * (CGFloat)i + gridHeight / 2.0);
             [array addObject:[NSValue valueWithCGPoint:point]];
         }
@@ -235,6 +239,7 @@
         self.pattern = [NSMutableArray array];
         [self updatePattern];
         self.color = GCPasscodePatternControlColorWhite;
+        [self setNeedsDisplay];
     }
 }
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
@@ -247,13 +252,16 @@
     if ([touches containsObject:self.touch]) {
         self.touch = nil;
         [self clearPattern];
+        [self setNeedsDisplay];
     }
 }
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
     if ([touches containsObject:self.touch]) {
         self.touch = nil;
+        if ([self.pattern count]) {
+            [self sendActionsForControlEvents:UIControlEventValueChanged];
+        }
         [self setNeedsDisplay];
-        [self sendActionsForControlEvents:UIControlEventValueChanged];
     }
 }
 
